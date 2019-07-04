@@ -1,10 +1,12 @@
 package rss1spring.crudtest.items;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ItemController {
@@ -44,8 +46,18 @@ public class ItemController {
     }
 
     @RequestMapping("/items/count")
-    public long getCount(){
+    public int getCount(){
         return itemService.getCount();
+    }
+
+    @PostMapping("/items/addMany")
+    public void addItem(@RequestBody List<Item> items){
+        itemService.saveAll(items);
+    }
+
+    @PostMapping("/items/filter")
+    public Page<Item> filterItems(@RequestBody Map<String,Object> body){
+        return itemService.filter(body);
     }
 
 }
