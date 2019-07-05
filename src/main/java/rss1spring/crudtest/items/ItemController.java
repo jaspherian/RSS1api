@@ -40,25 +40,33 @@ public class ItemController {
         itemService.delete(id);
     }
 
+    @GetMapping("/items/filter")
+    public Page<Item> filterItems(@RequestParam(required = false,value="page") Integer page,
+                                  @RequestParam(required = false,value="pageSize") Integer pageSize,
+                                  @RequestParam(required = false,value="search") String search,
+                                  @RequestParam(required = false,value="sortBy") String sortBy,
+                                  @RequestParam(required = false,value="sortOrder") String sortOrder){
+        return itemService.filter(page,pageSize,search,sortBy,sortOrder);
+    }
+
+    // currently unused
     @RequestMapping("/items/{page}/{size}")
     public List<Item> getItemsByPage(@PathVariable int page,@PathVariable int size){
         return itemService.getPage(page,size);
     }
-
+    // currently unused
     @RequestMapping("/items/count")
     public int getCount(){
         return itemService.getCount();
     }
 
+    // currently unused
     @PostMapping("/items/addMany")
     public void addItem(@RequestBody List<Item> items){
         itemService.saveAll(items);
     }
 
-    @PostMapping("/items/filter")
-    public Page<Item> filterItems(@RequestBody Map<String,Object> body){
-        return itemService.filter(body);
-    }
+
 
 }
 

@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import rss1spring.crudtest.utils.MapConverter;
 
 import java.util.*;
+import rss1spring.crudtest.utils.Utilities.Util;
 
 @Service
 public class ItemService {
@@ -49,21 +49,15 @@ public class ItemService {
         itemRepository.saveAll(items);
     }
 
-    public Page<Item> filter(Map<String,Object> body){
-        final int page          = MapConverter.Utils.getInt(body,"page");
-        final int pageSize      = MapConverter.Utils.getInt(body,"pageSize",12);
-        final String search     = MapConverter.Utils.getStringNoEmpty(body,"search");
-        final String sortColumn = MapConverter.Utils.getStringNoEmpty(body,"sortColumn");
-        final String sortBy     = MapConverter.Utils.getStringNoEmpty(body,"sortBy");
-
-        Sort sorted = sortColumn!=null ? Sort.by(sortColumn) : null;
-        if (sorted != null && sortBy != null && sortBy.equals("DESC"))
+    public Page<Item> filter(Integer page,Integer pageSize,String search,String sortBy,String sortOrder){
+        Sort sorted = Sort.by(Util.String(sortBy,"name"));
+        if (sorted != null && ("DESC").equals(sortOrder))
             sorted = sorted.descending();
 
         return itemRepository.filterItems(search,
                     sorted != null ?
-                    PageRequest.of(page, pageSize,sorted) :
-                    PageRequest.of(page, pageSize)
+                    PageRequest.of(Util.Int(page,0), Util.Int(pageSize,12),sorted) :
+                    PageRequest.of(Util.Int(page,0), Util.Int(pageSize,12))
                 );
     }
 
