@@ -9,38 +9,39 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/items")
 public class ItemController {
 
     @Autowired
     ItemService itemService;
 
 
-    @PostMapping("/items")
+    @PostMapping
     public void addItem(@RequestBody Item item){
         itemService.save(item);
     }
 
-    @RequestMapping("/items")
+    @GetMapping
     public List<Item> getAllItems(){
         return itemService.getAll();
     }
 
-    @RequestMapping("/items/{id}")
+    @GetMapping("/{id}")
     public Item getItem(@PathVariable int id){
         return itemService.get(id);
     }
 
-    @PutMapping("/items")
+    @PutMapping
     public void updateItem(@RequestBody Item item){
         itemService.save(item);
     }
 
-    @DeleteMapping("/items/{id}")
+    @DeleteMapping("/{id}")
     public void deleteItem(@PathVariable int id){
         itemService.delete(id);
     }
 
-    @GetMapping("/items/filter")
+    @GetMapping("/filter")
     public Page<Item> filterItems(@RequestParam(required = false,value="page") Integer page,
                                   @RequestParam(required = false,value="pageSize") Integer pageSize,
                                   @RequestParam(required = false,value="search") String search,
@@ -50,18 +51,18 @@ public class ItemController {
     }
 
     // currently unused
-    @RequestMapping("/items/{page}/{size}")
+    @GetMapping("/{page}/{size}")
     public List<Item> getItemsByPage(@PathVariable int page,@PathVariable int size){
         return itemService.getPage(page,size);
     }
     // currently unused
-    @RequestMapping("/items/count")
+    @GetMapping("/count")
     public int getCount(){
         return itemService.getCount();
     }
 
     // currently unused
-    @PostMapping("/items/addMany")
+    @PostMapping("/addMany")
     public void addItem(@RequestBody List<Item> items){
         itemService.saveAll(items);
     }
