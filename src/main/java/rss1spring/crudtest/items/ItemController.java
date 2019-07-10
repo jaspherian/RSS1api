@@ -1,5 +1,8 @@
 package rss1spring.crudtest.items;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -16,31 +19,47 @@ public class ItemController {
     ItemService itemService;
 
 
+
+    @ApiOperation(value="Creates an item")
+    @ApiResponses(
+            value={
+                    @ApiResponse(code = 100,message = "100 message."),
+                    @ApiResponse(code = 200,message = "200 success message.")
+
+            }
+    )
     @PostMapping
     public void addItem(@RequestBody Item item){
         itemService.save(item);
     }
 
-    @GetMapping
-    public List<Item> getAllItems(){
-        return itemService.getAll();
-    }
 
+
+    @ApiOperation(value="Retrieves an item by id")
     @GetMapping("/{id}")
     public Item getItem(@PathVariable int id){
         return itemService.get(id);
     }
 
+
+
+    @ApiOperation(value="Updates an item")
     @PutMapping
     public void updateItem(@RequestBody Item item){
         itemService.save(item);
     }
 
+
+
+    @ApiOperation(value="Deletes an item by id")
     @DeleteMapping("/{id}")
     public void deleteItem(@PathVariable int id){
         itemService.delete(id);
     }
 
+
+
+    @ApiOperation(value="Filters through items by pagination,search & sort")
     @GetMapping("/filter")
     public Page<Item> filterItems(@RequestParam(required = false,value="page") Integer page,
                                   @RequestParam(required = false,value="pageSize") Integer pageSize,
@@ -50,24 +69,34 @@ public class ItemController {
         return itemService.filter(page,pageSize,search,sortBy,sortOrder);
     }
 
+
+
+    // for testing
+    @ApiOperation(value="Adds multiple items")
+    @PostMapping("/addMany")
+    public void addItemMany(@RequestBody List<Item> items){
+        itemService.saveAll(items);
+    }
+
+
+
     // currently unused
+    /*
     @GetMapping("/{page}/{size}")
     public List<Item> getItemsByPage(@PathVariable int page,@PathVariable int size){
         return itemService.getPage(page,size);
     }
-    // currently unused
+
     @GetMapping("/count")
     public int getCount(){
         return itemService.getCount();
     }
 
-    // currently unused
-    @PostMapping("/addMany")
-    public void addItem(@RequestBody List<Item> items){
-        itemService.saveAll(items);
+    @GetMapping
+    public List<Item> getAllItems(){
+        return itemService.getAll();
     }
-
-
+    */
 
 }
 

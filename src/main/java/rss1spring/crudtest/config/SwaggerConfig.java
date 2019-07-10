@@ -3,6 +3,8 @@ package rss1spring.crudtest.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -19,6 +21,20 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("rss1spring.crudtest"))
                 .paths(regex("/items.*"))
-                .build();
+                .build()
+                .apiInfo(metaInfo());
+    }
+
+    private ApiInfo metaInfo(){
+        ApiInfo apiInfo = new ApiInfo(
+          "Spring Boot Swagger Exomple ape",
+                "Spring Boot Swagger Example ape for yutob",
+                "1.0",
+                "Terms of Service",
+                new Contact("Jaspher","https://www.idk.com","jaspherdingal@gmail.com"),
+                "Apache License Version 2.0",
+                "https://www.apache.org/license.html"
+        );
+        return apiInfo;
     }
 }
